@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project 369 - Mini ERP</title>
+    <style>
+        :root { --primary: #2563eb; --bg: #f8fafc; --text: #1e293b; }
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; background: var(--bg); color: var(--text); }
+        
+        /* Sidebar */
+        nav { width: 250px; height: 100vh; background: #1e293b; color: white; padding: 20px; position: fixed; }
+        nav h2 { color: #38bdf8; margin-bottom: 30px; }
+        nav button { width: 100%; padding: 12px; margin: 5px 0; border: none; background: transparent; color: #cbd5e1; text-align: left; cursor: pointer; border-radius: 5px; font-size: 16px; }
+        nav button:hover, nav button.active { background: #334155; color: white; }
+
+        /* Main Content */
+        main { margin-left: 280px; padding: 40px; width: 100%; }
+        .section { display: none; }
+        .section.active { display: block; }
+
+        /* Tables & Forms */
+        .card { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); margin-top: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 12px; border-bottom: 1px solid #e2e8f0; text-align: left; }
+        th { background: #f1f5f9; }
+        
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+        input, select, btn { padding: 10px; border: 1px solid #cbd5e1; border-radius: 5px; outline: none; }
+        .btn-primary { background: var(--primary); color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 5px; }
+        .btn-primary:hover { background: #1d4ed8; }
+    </style>
+</head>
+<body>
+
+<nav>
+    <h2>Project 369</h2>
+    <button onclick="showSection('partners')" id="btn-partners">Partners</button>
+    <button onclick="showSection('products')" id="btn-products">Products</button>
+    <button onclick="showSection('sales')" id="btn-sales">Sales Order</button>
+</nav>
+
+<main>
+    <!-- Partners Section -->
+    <div id="partners" class="section">
+        <h1>Partner Management</h1>
+        <div class="card">
+            <h3>Add New Partner</h3>
+            <div class="form-grid">
+                <input type="text" id="p_name" placeholder="Name">
+                <input type="text" id="p_mobile" placeholder="Mobile">
+                <input type="text" id="p_address" placeholder="Address">
+                <select id="p_type">
+                    <option value="Customer">Customer</option>
+                    <option value="Supplier">Supplier</option>
+                </select>
+            </div>
+            <button class="btn-primary" onclick="savePartner()">Save Partner</button>
+        </div>
+        <div class="card">
+            <table id="partnerTable">
+                <thead><tr><th>ID</th><th>Name</th><th>Mobile</th><th>Type</th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Products Section -->
+    <div id="products" class="section">
+        <h1>Product Management</h1>
+        <div class="card">
+            <h3>Add New Product</h3>
+            <div class="form-grid">
+                <input type="text" id="pr_name" placeholder="Product Name">
+                <input type="number" id="pr_sale" placeholder="Sale Price">
+                <input type="number" id="pr_buy" placeholder="Purchase Price">
+                <input type="number" id="pr_stock" placeholder="Initial Stock">
+            </div>
+            <button class="btn-primary" onclick="saveProduct()">Save Product</button>
+        </div>
+        <div class="card">
+            <table id="productTable">
+                <thead><tr><th>ID</th><th>Name</th><th>Sale Price</th><th>Stock</th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Sales Section (Simple Version) -->
+    <div id="sales" class="section">
+        <h1>Sales Orders</h1>
+        <div class="card">
+            <p>Sales and Purchase logic typically involves multi-line items. For now, check the console or use API to post. Tables are below:</p>
+            <table id="salesTable">
+                <thead><tr><th>ID</th><th>Partner</th><th>Total</th><th>Status</th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</main>
+
+<script>
+    const API_BASE = 'http://localhost:8787/api';
+
+    // ১. সেকশন পরিবর্তন করা (Routing)
+    function showSection(id) {
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        document.getElementById('btn-' + id).classList.add('active');
+        
+        if(id === 'partners') loadPartners();
+        if(id === 'products') loadProducts();
+        if(id === 'sales') loadSales();
+    }
+
+    // ২. পার্টনার হ্যান্ডলিং
+    async function loadPartners() {
+        const res = await fetch(`${API_BASE}/partners`);
+        const data = await res.json();
+        const tbody = document.querySelector('#partnerTable tbody');
+        tbody.innerHTML = data.map(p => `<tr><td>${p.id}</td><td>${p.name}</td><td>${p.mobile}</td><td>${p.partner_type}</td></tr>`).join('');
+    }
+
+    async function savePartner() {
+        const payload = {
+            name: document.getElementById('p_name').value,
+            mobile: document.getElementById('p_mobile').value,
+            address: document.getElementById('p_address').value,
+            partner_type: document.getElementById('p_type').value
+        };
+        await fetch(`${API_BASE}/partners`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(payload)
+        });
+        alert('Partner Saved!');
+        loadPartners();
+    }
+
+    // ৩. প্রোডাক্ট হ্যান্ডলিং
+    async function loadProducts() {
+        const res = await fetch(`${API_BASE}/products`);
+        const data = await res.json();
+        const tbody = document.querySelector('#productTable tbody');
+        tbody.innerHTML = data.map(p => `<tr><td>${p.id}</td><td>${p.name}</td><td>${p.sale_price}</td><td>${p.stock}</td></tr>`).join('');
+    }
+
+    async function saveProduct() {
+        const payload = {
+            name: document.getElementById('pr_name').value,
+            sale_price: parseFloat(document.getElementById('pr_sale').value),
+            purchase_price: parseFloat(document.getElementById('pr_buy').value),
+            stock: parseInt(document.getElementById('pr_stock').value),
+            description: "", unit: "Pcs"
+        };
+        await fetch(`${API_BASE}/products`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(payload)
+        });
+        alert('Product Saved!');
+        loadProducts();
+    }
+
+    // ৪. সেলস অর্ডার দেখা
+    async function loadSales() {
+        // নোট: ব্যাকএন্ডে আমরা JOIN কুয়েরি লিখেছিলাম, তাই partner_name দেখাবে
+        const res = await fetch(`${API_BASE}/sales`);
+        const data = await res.json();
+        const tbody = document.querySelector('#salesTable tbody');
+        tbody.innerHTML = data.map(s => `<tr><td>${s.id}</td><td>${s.partner_name}</td><td>${s.total_amount}</td><td>${s.status}</td></tr>`).join('');
+    }
+
+    // ডিফল্ট সেকশন
+    showSection('partners');
+</script>
+
+</body>
+</html>

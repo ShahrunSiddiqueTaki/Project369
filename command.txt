@@ -1,0 +1,20 @@
+
+আপনার প্রজেক্টের জন্য প্রয়োজনীয় সব কমান্ড সিরিয়ালি নিচে দেওয়া হলো:
+
+npm create hono@latest project369
+
+cd project369
+
+npm install
+
+npx wrangler types
+
+or
+
+npm install -D @cloudflare/workers-types
+
+npx wrangler login
+
+npx wrangler logout
+
+npx wrangler dev src/index.ts --remote 
