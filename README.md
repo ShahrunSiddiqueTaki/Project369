@@ -1,21 +1,63 @@
-```txt
+Project 369 - ERP & Website
+This project is a lightweight ERP system built with Hono, Cloudflare Workers, and D1 Database.
+🚀 Quick Start Commands
+1. Initial Setup
+প্রজেক্টটি শুরু করার এবং প্রয়োজনীয় ফাইল ইন্সটল করার কমান্ড:
+code
+Bash
+# প্রজেক্ট তৈরি করা
+npm create hono@latest project369
+
+# প্রজেক্ট ফোল্ডারে প্রবেশ
+cd project369
+
+# ডিপেন্ডেন্সি ইন্সটল করা
 npm install
-npm run dev
-```
+2. Authentication (Cloudflare)
+ক্লাউডফ্লেয়ার অ্যাকাউন্টের সাথে পিসি কানেক্ট বা ডিসকানেক্ট করার কমান্ড:
+code
+Bash
+# লগইন করা
+npx wrangler login
 
-```txt
-npm run deploy
-```
+# লগআউট করা
+npx wrangler logout
+3. Type Generation (TypeScript Support)
+D1Database বা অন্যান্য টাইপ এরর ফিক্স করার জন্য এবং টাইপ সিঙ্ক্রোনাইজ করার জন্য:
+code
+Bash
+# সরাসরি কমান্ড দিয়ে টাইপ জেনারেট করা
+npx wrangler types
 
-[For generating/synchronizing types based on your Worker configuration run](https://developers.cloudflare.com/workers/wrangler/commands/#types):
+# অথবা প্যাকেজ ইন্সটল করা (যদি প্রয়োজন হয়)
+npm install -D @cloudflare/workers-types
 
-```txt
+# অথবা রিডমি অনুযায়ী রান করা
 npm run cf-typegen
-```
-
-Pass the `CloudflareBindings` as generics when instantiation `Hono`:
-
-```ts
-// src/index.ts
+Note: src/index.ts ফাইলে টাইপ ব্যবহার করার নিয়ম:
+code
+Ts
 const app = new Hono<{ Bindings: CloudflareBindings }>()
-```
+4. Local Development
+লোকাল কম্পিউটারে কোড রান করা কিন্তু সরাসরি ক্লাউডফ্লেয়ারের অনলাইন ডিবি (Remote DB) ব্যবহার করার কমান্ড:
+code
+Bash
+# লোকাল ডেভেলপমেন্ট উইথ রিমোট ডিবি
+npx wrangler dev src/index.ts --remote
+
+# সাধারণ লোকাল রান
+npm run dev
+5. Deployment
+প্রজেক্টটি ইন্টারনেটে লাইভ করার জন্য:
+code
+Bash
+# প্রজেক্ট ডেপ্লয় করা
+npm run deploy
+
+# অথবা সরাসরি কমান্ড
+npx wrangler deploy
+🛠 Project Structure Summary
+Backend: Hono Framework (Cloudflare Workers)
+Database: Cloudflare D1 (SQLite)
+Frontend: Vanilla JavaScript (SPA)
+Configuration: wrangler.jsonc
