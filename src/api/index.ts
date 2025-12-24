@@ -8,6 +8,7 @@ type Bindings = {
 const app = new Hono<{ Bindings: Bindings }>()
 app.use('/*', cors())
 
+
 app.get('/', (c) => c.text('Project 369 ERP API is Running!'))
 
 // ================= 1. PARTNERS API =================

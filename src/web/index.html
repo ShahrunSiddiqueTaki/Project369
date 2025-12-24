@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project 369 - Mini ERP</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav>
+    <h2>Project 369</h2>
+    <button onclick="showSection('partners')" id="btn-partners">Partners</button>
+    <button onclick="showSection('products')" id="btn-products">Products</button>
+    <button onclick="showSection('sales')" id="btn-sales">Sales Order</button>
+</nav>
+
+<main>
+    <!-- Partners Section -->
+    <div id="partners" class="section">
+        <h1>Partner Management</h1>
+        <div class="card">
+            <h3>Add New Partner</h3>
+            <div class="form-grid">
+                <input type="text" id="p_name" placeholder="Name">
+                <input type="text" id="p_mobile" placeholder="Mobile">
+                <input type="text" id="p_address" placeholder="Address">
+                <select id="p_type">
+                    <option value="Customer">Customer</option>
+                    <option value="Supplier">Supplier</option>
+                </select>
+            </div>
+            <button class="btn-primary" onclick="savePartner()">Save Partner</button>
+        </div>
+        <div class="card">
+            <table id="partnerTable">
+                <thead><tr><th>ID</th><th>Name</th><th>Mobile</th><th>Type</th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Products Section -->
+    <div id="products" class="section">
+        <h1>Product Management</h1>
+        <div class="card">
+            <h3>Add New Product</h3>
+            <div class="form-grid">
+                <input type="text" id="pr_name" placeholder="Product Name">
+                <input type="number" id="pr_sale" placeholder="Sale Price">
+                <input type="number" id="pr_buy" placeholder="Purchase Price">
+                <input type="number" id="pr_stock" placeholder="Initial Stock">
+            </div>
+            <button class="btn-primary" onclick="saveProduct()">Save Product</button>
+        </div>
+        <div class="card">
+            <table id="productTable">
+                <thead><tr><th>ID</th><th>Name</th><th>Sale Price</th><th>Stock</th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Sales Section (Simple Version) -->
+    <div id="sales" class="section">
+        <h1>Sales Orders</h1>
+        <div class="card">
+            <p>Sales and Purchase logic typically involves multi-line items. For now, check the console or use API to post. Tables are below:</p>
+            <table id="salesTable">
+                <thead><tr><th>ID</th><th>Partner</th><th>Total</th><th>Status</th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</main>
+<script src="script.js"></script>
+</body>
+</html>

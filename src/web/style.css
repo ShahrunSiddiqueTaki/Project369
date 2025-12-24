@@ -1,0 +1,117 @@
+:root {
+    --primary: #2563eb;
+    --bg: #f8fafc;
+    --text: #1e293b;
+}
+
+body {
+    font-family: 'Segoe UI', sans-serif;
+    margin: 0;
+    display: flex;
+    background: var(--bg);
+    color: var(--text);
+}
+
+/* Sidebar */
+nav {
+    width: 250px;
+    height: 100vh;
+    background: #1e293b;
+    color: white;
+    padding: 20px;
+    position: fixed;
+}
+
+nav h2 {
+    color: #38bdf8;
+    margin-bottom: 30px;
+}
+
+nav button {
+    width: 100%;
+    padding: 12px;
+    margin: 5px 0;
+    border: none;
+    background: transparent;
+    color: #cbd5e1;
+    text-align: left;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+nav button:hover,
+nav button.active {
+    background: #334155;
+    color: white;
+}
+
+/* Main Content */
+main {
+    margin-left: 280px;
+    padding: 40px;
+    width: 100%;
+}
+
+.section {
+    display: none;
+}
+
+.section.active {
+    display: block;
+}
+
+/* Tables & Forms */
+.card {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+    margin-top: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th,
+td {
+    padding: 12px;
+    border-bottom: 1px solid #e2e8f0;
+    text-align: left;
+}
+
+th {
+    background: #f1f5f9;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+input,
+select,
+btn {
+    padding: 10px;
+    border: 1px solid #cbd5e1;
+    border-radius: 5px;
+    outline: none;
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.btn-primary:hover {
+    background: #1d4ed8;
+}
