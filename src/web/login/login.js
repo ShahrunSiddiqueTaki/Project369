@@ -1,3 +1,4 @@
+const API_BASE = 'http://localhost:8787/api';
 const form = document.getElementById('login-form')
 const errorMessage = document.getElementById('error-message')
 
@@ -8,7 +9,7 @@ form.addEventListener('submit', async (e) => {
   const formData = new FormData(form)
 
   try {
-    const res = await fetch('/login', {
+    const res = await fetch(`${API_BASE}/login`, {
       method: 'POST',
       body: formData
     })
@@ -20,7 +21,7 @@ form.addEventListener('submit', async (e) => {
     }
 
     // On success, redirect
-    window.location.href = '/dashboard'
+    window.location.href = './../public/index.html';
   } catch (err) {
     errorMessage.textContent = 'Network error'
   }

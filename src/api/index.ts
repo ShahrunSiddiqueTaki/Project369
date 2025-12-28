@@ -1,5 +1,8 @@
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
+import signup from './signup'
+import login from './login'
+import users from './users'
 
 type Bindings = {
   DB: D1Database
@@ -10,6 +13,9 @@ app.use('/*', cors())
 
 
 app.get('/', (c) => c.text('Project 369 ERP API is Running!'))
+app.route('/api', signup);
+app.route('/api', login);
+app.route('/api', users);
 
 // ================= 1. PARTNERS API =================
 app.get('/api/partners', async (c) => {

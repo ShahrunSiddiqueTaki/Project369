@@ -52,3 +52,29 @@ CREATE TABLE IF NOT EXISTS order_items (
   subtotal REAL NOT NULL,
   FOREIGN KEY (product_id) REFERENCES products(id)
 );
+
+-- Users table
+CREATE TABLE IF NOT EXISTS users (
+  user_id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_name TEXT NOT NULL,
+  email TEXT NOT NULL UNIQUE,
+  password TEXT NOT NULL
+);
+
+-- Roles table
+CREATE TABLE IF NOT EXISTS roles (
+  role_id INTEGER PRIMARY KEY AUTOINCREMENT,
+  role_name TEXT NOT NULL UNIQUE
+);
+
+-- Mapping table for user roles
+CREATE TABLE IF NOT EXISTS user_roles (
+  u_id INTEGER NOT NULL,
+  r_id INTEGER NOT NULL,
+  FOREIGN KEY(u_id) REFERENCES users(user_id) ON DELETE CASCADE,
+  FOREIGN KEY(r_id) REFERENCES roles(role_id) ON DELETE CASCADE,
+  PRIMARY KEY(u_id)
+);
+
+-- Insert default roles
+INSERT OR IGNORE INTO roles (role_name) VALUES ('user'), ('admin');
