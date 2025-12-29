@@ -49,4 +49,16 @@ app.put('/users/:id/role', async (c) => {
   return c.json({ message: 'Updated' });
 })
 
+// Delete /users/:id -> Delete User
+app.delete('/users/:id', async (c) => {
+  const userId = await c.req.param('id');
+  await c.env.DB.prepare(`
+      DELETE FROM users WHERE user_id = ?
+    `)
+    .bind(userId)
+    .run()
+
+  return c.json({ message: "User Deleted!" })
+})
+
 export default app

@@ -23,7 +23,7 @@ function populateTable(users) {
       <td id="role_${user.user_id}">${user.role}</td>
       <td>
         <button class="action-btn edit-btn" onclick="editUser(${user.user_id})">Edit Role</button>
-        <button class="action-btn delete-btn" onclick="deleteUser()">Delete</button>
+        <button class="action-btn delete-btn" onclick="deleteUser(${user.user_id})">Delete</button>
       </td>
     `
     usersTableBody.appendChild(tr)
@@ -68,6 +68,19 @@ async function updateRole(userId) {
     if (!res.ok) throw new Error('Failed to update role');
     fetchUsers();
     alert('User role updated!');
+  } catch (error) {
+      console.error(error);
+  }
+}
+
+// Delete User
+async function deleteUser(userId) {
+  try {
+      const res = await fetch(`${API_BASE}/users/${userId}`, {
+      method: 'DELETE'
+  })
+    if (!res.ok) throw new Error('Failed to delete role!');
+    fetchUsers();
   } catch (error) {
       console.error(error);
   }
