@@ -35,13 +35,13 @@ app.post('/login', async (c) => {
       .first()
 
     if (!user) {
-      return c.text('Invalid email or password', 401)
+      return c.text('Invalid email', 401)
     }
 
     const passwordHash = await hashPassword(password)
 
     if (user.password !== passwordHash) {
-      return c.text('Invalid email or password', 401)
+      return c.text('Invalid password', 401)
     }
 
     // Login successful
