@@ -90,3 +90,13 @@ th {
   background-color: #e84118;
   color: #fff;
 }
+
+.cancel-btn {
+  background-color: red;
+  color: #fff;
+}
+
+.save-btn {
+  background-color: green;
+  color: #fff;
+}

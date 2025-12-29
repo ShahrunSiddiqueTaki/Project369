@@ -1,5 +1,4 @@
 const API_BASE = 'http://localhost:8787/api';
-const addUserForm = document.getElementById('addUserForm')
 const usersTableBody = document.querySelector('#usersTable tbody')
 
 // Fetch users from API
@@ -21,81 +20,56 @@ function populateTable(users) {
     tr.innerHTML = `
       <td>${user.user_name}</td>
       <td>${user.email}</td>
-      <td>${user.role}</td>
+      <td id="role_${user.user_id}">${user.role}</td>
       <td>
-        <button class="action-btn edit-btn" onclick="editUser('${user.user_id}', '${user.role}')">Edit Role</button>
-        <button class="action-btn delete-btn" onclick="deleteUser('${user.user_id}')">Delete</button>
+        <button class="action-btn edit-btn" onclick="editUser(${user.user_id})">Edit Role</button>
+        <button class="action-btn delete-btn" onclick="deleteUser()">Delete</button>
       </td>
     `
     usersTableBody.appendChild(tr)
   })
 }
 
-// Add new user
-addUserForm.addEventListener('submit', async (e) => {
-  e.preventDefault()
+async function editUser(userId) {
+  const currentRole = document.getElementById(`role_${userId}`);
 
-  const username = document.getElementById('username').value.trim()
-  const email = document.getElementById('email').value.trim()
-  const password = document.getElementById('password').value
-  const role = document.getElementById('role').value
-
-  if (!username || !email || !password) return alert('All fields are required!')
 
   try {
-    const res = await fetch(`${API_BASE}/users`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, email, password, role })
-    })
-    const data = await res.json()
-    if (res.ok) {
-      addUserForm.reset()
-      fetchUsers()
-    } else {
-      alert(data.error)
-    }
+    const res = await fetch(`${API_BASE}/roles`);
+    const roles = await res.json();
+    let html = `<select name="roles" id="roles_0">`;
+    roles.forEach(role => {
+      html += `<option value="${role.role_id}">${role.role_name}</option>`;
+    });  
+    html += `
+    </select>
+    <button class="action-btn save-btn" onclick="updateRole(${userId})">Save</button>
+    <button class="action-btn cancel-btn" onclick="fetchUsers()">Cancel</button>
+    `;
+    currentRole.innerHTML = html;
   } catch (error) {
-    console.error('Error adding user:', error)
-  }
-})
-
-// Edit user role
-async function editUser(user_id, currentRole) {
-  const newRole = prompt(`Enter new role (admin/user):`, currentRole)
-  if (!newRole || !['admin', 'user'].includes(newRole.toLowerCase())) return
-
-  try {
-    const res = await fetch(`${API_BASE}/users/${user_id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ role: newRole.toLowerCase() })
-    })
-    const data = await res.json()
-    if (res.ok) {
-      fetchUsers()
-    } else {
-      alert(data.error)
-    }
-  } catch (error) {
-    console.error('Error updating role:', error)
+      console.error('Error fetching roles:', error)
   }
 }
 
-// Delete user
-async function deleteUser(user_id) {
-  if (!confirm('Are you sure you want to delete this user?')) return
+async function updateRole(userId) {
+  
+  const select = document.getElementById('roles_0');
+  const userRole = select.value;
 
   try {
-    const res = await fetch(`${API_BASE}/users/${user_id}`, { method: 'DELETE' })
-    const data = await res.json()
-    if (res.ok) {
-      fetchUsers()
-    } else {
-      alert(data.error)
-    }
+    const res = await fetch(`${API_BASE}/users/${userId}/role`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ role: userRole })
+    })
+    if (!res.ok) throw new Error('Failed to update role');
+    fetchUsers();
+    alert('User role updated!');
   } catch (error) {
-    console.error('Error deleting user:', error)
+      console.error(error);
   }
 }
 
